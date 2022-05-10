@@ -28,12 +28,9 @@ namespace ToDoListApp.Service
 
             try
             {
-
                 var tasksList = _taskRepository.GetAllTasks().ToList();
 
-                var tasksListDto = new List<TaskDto>();
-
-                tasksListDto= _mapper.Map<List<Tasks>, List<TaskDto>>(tasksList);
+                var tasksListDto= _mapper.Map<List<Tasks>, List<TaskDto>>(tasksList);
 
                 response.Success = true;
                 response.Message = "ok";
