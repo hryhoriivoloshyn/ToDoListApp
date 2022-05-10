@@ -9,9 +9,11 @@ namespace ToDoListApp.Data
     {
         IEnumerable<Tasks> GetAllTasks();
         Tasks GetTaskById(int taskId);
-        void InsertTask(Tasks task);
-        void UpdateTask(Tasks task);
-        void DeleteTask(int taskId);
-        void Save();
+        Tasks GetTaskByName(string name);
+        bool IsTaskExists(int taskId);
+        bool InsertTask(Tasks task);
+        bool UpdateTask(Tasks task);
+        bool DeleteTask(int taskId);
+        bool Save();
     }
 }

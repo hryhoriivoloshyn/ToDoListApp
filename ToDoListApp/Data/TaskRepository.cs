@@ -9,43 +9,56 @@ namespace ToDoListApp.Data
 {
     public class TaskRepository : ITaskRepository, IDisposable
     {
-        private ApplicationDbContext context;
+        private readonly ApplicationDbContext _context;
 
-        public TaskRepository(ApplicationDbContext _context)
+        public TaskRepository(ApplicationDbContext context)
         {
-            context=_context;
+            _context=context;
         }
 
 
         public IEnumerable<Tasks> GetAllTasks()
         {
-            return context.Tasks.ToList();
+            return _context.Tasks.ToList();
         }
 
         public Tasks GetTaskById(int taskId)
         {
-            return context.Tasks.Find(taskId);
+            return _context.Tasks.Find(taskId);
         }
 
-        public void InsertTask(Tasks task)
+        public Tasks GetTaskByName(string name)
         {
-            context.Tasks.Add(task);
+            return _context.Tasks.FirstOrDefault(t=>t.Name==name);
         }
 
-        public void UpdateTask(Tasks task)
+        public bool IsTaskExists(int id)
         {
-            context.Tasks.Update(task);
+            return _context.Tasks.Any(t => t.Id == id);
         }
 
-        public void DeleteTask(int taskId)
+        public bool InsertTask(Tasks task)
         {
-            Tasks task = context.Tasks.Find(taskId);
-            context.Tasks.Remove(task);
+            _context.Tasks.Add(task);
+            return Save();
         }
 
-        public void Save()
+        public bool UpdateTask(Tasks task)
         {
-            context.SaveChanges();
+            _context.Tasks.Update(task);
+            return Save();
+        }
+
+        public bool DeleteTask(int taskId)
+        {
+            Tasks task = _context.Tasks.Find(taskId);
+            _context.Tasks.Remove(task);
+            return Save();
+        }
+
+        public bool Save()
+        {
+            return _context.SaveChanges() >=0 ? true : false;
         }
 
         private bool disposed = false;
@@ -56,7 +69,7 @@ namespace ToDoListApp.Data
             {
                 if (disposing)
                 {
-                    context.Dispose();
+                    _context.Dispose();
                 }
             }
             this.disposed=true;

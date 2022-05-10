@@ -10,9 +10,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using ToDoListApp.Data;
 using Newtonsoft.Json;
+using ToDoListApp.Dtos;
+using ToDoListApp.Service;
 
 namespace ToDoListApp
 {
@@ -31,6 +34,15 @@ namespace ToDoListApp
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
+
+            var mapperConfig = new MapperConfiguration(mc =>
+                mc.AddProfile(new MappingProfile()));
+
+            IMapper mapper = mapperConfig.CreateMapper();
+            services.AddSingleton(mapper);
+
+            services.AddScoped<ITaskRepository, TaskRepository>();
+            services.AddScoped<ITaskService, TaskService>();
 
             services.AddControllers();
 
