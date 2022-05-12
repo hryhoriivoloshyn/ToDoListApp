@@ -16,7 +16,6 @@ namespace ToDoListApp.Data
             _context=context;
         }
 
-
         public IEnumerable<Tasks> GetAllTasks()
         {
             return _context.Tasks.ToList();

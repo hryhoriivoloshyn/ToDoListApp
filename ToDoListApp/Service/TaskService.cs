@@ -20,8 +20,7 @@ namespace ToDoListApp.Service
             _taskRepository = taskRepository;
             _mapper= mapper;
         }
-
-
+        
         public ServiceResponse<List<TaskDto>> GetTasks()
         {
             ServiceResponse<List<TaskDto>> response = new ServiceResponse<List<TaskDto>>();

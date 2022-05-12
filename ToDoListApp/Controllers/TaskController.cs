@@ -13,11 +13,11 @@ namespace ToDoListApp.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TaskController : ControllerBase
+    public class TasksController : ControllerBase
     {
         private readonly ITaskService _service;
 
-        public TaskController(ITaskService service)
+        public TasksController(ITaskService service)
         {
             _service= service;
         }
