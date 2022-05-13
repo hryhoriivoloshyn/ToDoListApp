@@ -122,8 +122,7 @@ namespace ToDoListApp.Service
                 {
                     Name = createTaskDto.Name,
                     Description = createTaskDto.Description,
-                    DateTime = DateTime.Now,
-                    IsCompleted = false
+                    IsCompleted = createTaskDto.IsCompleted
                 };
 
                 if (!_taskRepository.InsertTask(newTask))
