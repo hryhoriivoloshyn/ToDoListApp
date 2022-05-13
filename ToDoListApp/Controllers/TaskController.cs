@@ -25,7 +25,7 @@ namespace ToDoListApp.Controllers
         public IActionResult GetAll()
         {
             var tasks = _service.GetTasks();
-            return Ok(tasks);
+            return Ok(tasks.Data);
         }
 
         [HttpGet("{TaskId:int}",Name = "GetTaskById")]
@@ -43,7 +43,7 @@ namespace ToDoListApp.Controllers
                 return NotFound();
             }
 
-            return Ok(taskFound);
+            return Ok(taskFound.Data);
         }
 
         [HttpPost]
@@ -63,7 +63,7 @@ namespace ToDoListApp.Controllers
 
             if (newTask.Success == false && newTask.Message == "Exist")
             {
-                return Ok(newTask);
+                return Ok(newTask.Data);
             }
 
             if (newTask.Success == false && newTask.Message == "RepositoryError")
@@ -80,7 +80,7 @@ namespace ToDoListApp.Controllers
                 return StatusCode(500, ModelState);
             }
 
-            return CreatedAtRoute("GetTaskById", new {TaskId=newTask.Data.Id}, newTask);
+            return Ok(newTask);
         }
 
         [HttpPut("{TaskId:int}")]
@@ -95,7 +95,7 @@ namespace ToDoListApp.Controllers
 
             if (updateTask.Success == false && updateTask.Message == "NotFound")
             {
-                return NotFound(updateTask);
+                return NotFound(updateTask.Data);
             }
 
             if (updateTask.Success == false && updateTask.Message == "RepositoryError")
@@ -112,7 +112,7 @@ namespace ToDoListApp.Controllers
                 return StatusCode(500, ModelState);
             }
 
-            return Ok(updateTask);
+            return Ok(updateTask.Data);
 
             
         }
