@@ -29,7 +29,7 @@ namespace ToDoListApp.Controllers
         }
 
         [HttpGet("{TaskId:int}",Name = "GetTaskById")]
-        public ActionResult<TaskDto> GetTaskById(int TaskId)
+        public IActionResult GetTaskById(int TaskId)
         {
             if (TaskId <= 0)
             {
@@ -47,7 +47,7 @@ namespace ToDoListApp.Controllers
         }
 
         [HttpPost]
-        public ActionResult<TaskDto> Post([FromBody] CreateTaskDto createTaskDto)
+        public IActionResult Post([FromBody] CreateTaskDto createTaskDto)
         {
             if (createTaskDto == null)
             {
@@ -61,55 +61,51 @@ namespace ToDoListApp.Controllers
 
             var newTask = _service.AddTask(createTaskDto);
 
-            if (newTask.Success == false && newTask.Message == "Exist")
-            {
-                return Ok(newTask.Data);
-            }
 
-            if (newTask.Success == false && newTask.Message == "RepositoryError")
+            if (newTask.Success == false && newTask.Message == StatusEnum.RepositoryError)
             {
                 ModelState.AddModelError("",
                     $"Something went wrong in data access layer when adding task {createTaskDto}");
-                return StatusCode(500, ModelState);
+                return StatusCode(StatusCodes.Status500InternalServerError, ModelState);
             }
 
-            if (newTask.Success == false && newTask.Message == "Error")
+            if (newTask.Success == false && newTask.Message == StatusEnum.Error)
             {
                 ModelState.AddModelError("",
                     $"Something went wrong in _service layer when adding task {createTaskDto}");
-                return StatusCode(500, ModelState);
+                return StatusCode(StatusCodes.Status500InternalServerError, ModelState);
             }
 
-            return Ok(newTask);
+            return Ok(newTask.Data);
         }
 
         [HttpPut("{TaskId:int}")]
         public IActionResult UpdateTask(int TaskId, [FromBody] UpdateTaskDto updateTaskDto)
         {
-            if (updateTaskDto == null && updateTaskDto.Id != TaskId)
+            if (updateTaskDto == null || updateTaskDto.Id != TaskId)
             {
                 return BadRequest(ModelState);
             }
 
             var updateTask = _service.UpdateTask(updateTaskDto);
 
-            if (updateTask.Success == false && updateTask.Message == "NotFound")
+            if (updateTask.Success == false && updateTask.Message == StatusEnum.NotFound)
             {
                 return NotFound(updateTask.Data);
             }
 
-            if (updateTask.Success == false && updateTask.Message == "RepositoryError")
+            if (updateTask.Success == false && updateTask.Message == StatusEnum.RepositoryError)
             {
                 ModelState.AddModelError("",
                     $"Some thing went wrong in the data access layer when updating task {updateTaskDto}");
-                return StatusCode(500, ModelState);
+                return StatusCode(StatusCodes.Status500InternalServerError, ModelState);
             }
 
-            if (updateTask.Success == false && updateTask.Message == "Error")
+            if (updateTask.Success == false && updateTask.Message == StatusEnum.Error)
             {
                 ModelState.AddModelError("",
                     $"Something went wrong in the _service layer when updating task {updateTaskDto}");
-                return StatusCode(500, ModelState);
+                return StatusCode(StatusCodes.Status500InternalServerError, ModelState);
             }
 
             return Ok(updateTask.Data);
@@ -122,27 +118,27 @@ namespace ToDoListApp.Controllers
         {
             var deleteTask = _service.DeleteTask(TaskId);
 
-            if (deleteTask.Success == false && deleteTask.Message == "NotFound")
+            if (deleteTask.Success == false && deleteTask.Message == StatusEnum.NotFound)
             {
                 ModelState.AddModelError("", "Task Not Found");
                 return NotFound(ModelState);
             }
 
-            if (deleteTask.Success == false && deleteTask.Message == "RepositoryError")
+            if (deleteTask.Success == false && deleteTask.Message == StatusEnum.RepositoryError)
             {
                 ModelState.AddModelError("",
                     $"Something went wrong in data access layer when deleting task with id {TaskId}");
-                return StatusCode(500, ModelState);
+                return StatusCode(StatusCodes.Status500InternalServerError, ModelState);
             }
 
-            if (deleteTask.Success == false && deleteTask.Message == "Error")
+            if (deleteTask.Success == false && deleteTask.Message == StatusEnum.Error)
             {
                 ModelState.AddModelError("", 
                     $"Something went wrong in _service layer when deleting task with id {TaskId}");
-                return StatusCode(500, ModelState);
+                return StatusCode(StatusCodes.Status500InternalServerError, ModelState);
             }
 
-            return NoContent();
+            return Ok();
         }
 
     }

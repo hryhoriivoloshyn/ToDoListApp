@@ -13,12 +13,12 @@ namespace ToDoListApp.Data
         {
             Database.EnsureCreated();
         }
-        public virtual DbSet<Tasks> Tasks { get; set; }
+        public virtual DbSet<ToDoTask> Tasks { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Tasks>(entity =>
+            modelBuilder.Entity<ToDoTask>(entity =>
             {
                 entity.HasKey(e => e.Id);
             });

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ToDoListApp.Controllers;
 using ToDoListApp.Models;
 
 namespace ToDoListApp.Dtos
@@ -7,8 +8,12 @@ namespace ToDoListApp.Dtos
     {
         public MappingProfile()
         {
-            CreateMap<Tasks, TaskDto>();
-            CreateMap<TaskDto, Tasks>();
+            CreateMap<ToDoTask, TaskDto>();
+            CreateMap<TaskDto, ToDoTask>();
+            CreateMap<CreateTaskDto, ToDoTask>();
+            CreateMap<ToDoTask, CreateTaskDto>();
+            CreateMap<UpdateTaskDto, ToDoTask>();
+            CreateMap<ToDoTask, UpdateTaskDto>();
         }
     }
 }

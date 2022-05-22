@@ -29,17 +29,17 @@ namespace ToDoListApp.Service
             {
                 var tasksList = _taskRepository.GetAllTasks().ToList();
 
-                var tasksListDto= _mapper.Map<List<Tasks>, List<TaskDto>>(tasksList);
+                var tasksListDto= _mapper.Map<List<ToDoTask>, List<TaskDto>>(tasksList);
 
                 response.Success = true;
-                response.Message = "ok";
+                response.Message = StatusEnum.OK;
                 response.Data = tasksListDto;
             }
             catch (Exception e)
             {
                 response.Success = false;
                 response.Data = null;
-                response.Message = "Error";
+                response.Message = StatusEnum.Error;
                 response.ErrorMessages = new List<string> { Convert.ToString(e.Message) };
             }
 
@@ -58,14 +58,14 @@ namespace ToDoListApp.Service
                 if (task == null)
                 {
                     response.Success = false;
-                    response.Message = "Not Found";
+                    response.Message = StatusEnum.NotFound;
                     return response;
                 }
 
                 var taskDto = _mapper.Map<TaskDto>(task);
 
                 response.Success = true;
-                response.Message = "ok";
+                response.Message = StatusEnum.OK;
                 response.Data = taskDto;
 
             }
@@ -73,39 +73,7 @@ namespace ToDoListApp.Service
             {
                 response.Success = false;
                 response.Data = null;
-                response.Message = "Error";
-                response.ErrorMessages = new List<string> { Convert.ToString(e.Message) };
-            }
-
-            return response;
-        }
-
-        public ServiceResponse<TaskDto> GetByName(string name)
-        {
-            ServiceResponse<TaskDto> response = new ServiceResponse<TaskDto>();
-
-            try
-            {
-                var task = _taskRepository.GetTaskByName(name);
-
-                if (task == null)
-                {
-                    response.Success = false;
-                    response.Message = "Not Found";
-                    return response;
-                }
-
-                var taskDto = _mapper.Map<TaskDto>(task);
-
-                response.Success = true;
-                response.Message = "ok";
-                response.Data = taskDto;
-            }
-            catch (Exception e)
-            {
-                response.Success = false;
-                response.Data = null;
-                response.Message = "Error";
+                response.Message = StatusEnum.Error;
                 response.ErrorMessages = new List<string> { Convert.ToString(e.Message) };
             }
 
@@ -118,29 +86,27 @@ namespace ToDoListApp.Service
 
             try
             {
-                Tasks newTask = new Tasks()
-                {
-                    Name = createTaskDto.Name,
-                    Description = createTaskDto.Description,
-                    IsCompleted = createTaskDto.IsCompleted
-                };
+                ToDoTask newTask = _mapper.Map<ToDoTask>(createTaskDto);
 
-                if (!_taskRepository.InsertTask(newTask))
+                var insertResult = _taskRepository.InsertTask(newTask);
+
+                if (!insertResult)
                 {
                     response.Success = false;
-                    response.Message = "RepositoryError";
+                    response.Message = StatusEnum.RepositoryError;
                     response.Data = null;
                     return response;
                 }
 
                 response.Success = true;
+                response.Message = StatusEnum.OK;
                 response.Data = _mapper.Map<TaskDto>(newTask);
             }
             catch (Exception e)
             {
                 response.Success = false;
                 response.Data = null;
-                response.Message = "Error";
+                response.Message = StatusEnum.Error;
                 response.ErrorMessages = new List<string> { Convert.ToString(e.Message) };
             }
 
@@ -158,30 +124,30 @@ namespace ToDoListApp.Service
                 if (existingTask == null)
                 {
                     response.Success = false;
-                    response.Message = "NotFound";
+                    response.Message = StatusEnum.NotFound;
                     response.Data = null;
                     return response;
                 }
 
-                existingTask.Name=updateTaskDto.Name;
-                existingTask.Description=updateTaskDto.Description;
-                existingTask.IsCompleted=updateTaskDto.IsCompleted;
+                existingTask = _mapper.Map(updateTaskDto, existingTask);
 
                 if (!_taskRepository.UpdateTask(existingTask))
                 {
                     response.Success = false;
-                    response.Message = "RepositoryError";
+                    response.Message = StatusEnum.RepositoryError;
                     response.Data = null;
                     return response;
                 }
 
-                var taskDto = _mapper.Map<TaskDto>(existingTask);
+                response.Data = _mapper.Map<TaskDto>(existingTask);
+                response.Success = true;
+                response.Message = StatusEnum.OK;
             }
             catch (Exception e)
             {
                 response.Success = false;
                 response.Data = null;
-                response.Message = "Error";
+                response.Message = StatusEnum.Error;
                 response.ErrorMessages = new List<string> { Convert.ToString(e.Message) };
             }
 
@@ -199,7 +165,7 @@ namespace ToDoListApp.Service
                 if (existingTask == false)
                 {
                     response.Success = false;
-                    response.Message = "NotFound";
+                    response.Message = StatusEnum.NotFound;
                     response.Data = null;
                     return response;
                 }
@@ -207,19 +173,19 @@ namespace ToDoListApp.Service
                 if (!_taskRepository.DeleteTask(id))
                 {
                     response.Success = false;
-                    response.Message = "RepositoryError";
+                    response.Message = StatusEnum.RepositoryError;
                     response.Data = null;
                     return response;
                 }
 
                 response.Success = true;
-                response.Message = "TaskDeleted";
+                response.Message = StatusEnum.TaskDeleted;
             }
             catch (Exception e)
             {
                 response.Success = false;
                 response.Data = null;
-                response.Message = "Error";
+                response.Message = StatusEnum.Error;
                 response.ErrorMessages = new List<string> { Convert.ToString(e.Message) };
             }
 

@@ -9,7 +9,6 @@ namespace ToDoListApp.Service
     {
         ServiceResponse<List<TaskDto>> GetTasks();
         ServiceResponse<TaskDto> GetById(int id);
-        ServiceResponse<TaskDto> GetByName(string name);
         ServiceResponse<TaskDto> AddTask(CreateTaskDto createTaskDto);
         ServiceResponse<TaskDto> UpdateTask(UpdateTaskDto updateTaskDto);
         ServiceResponse<TaskDto> DeleteTask(int id);
