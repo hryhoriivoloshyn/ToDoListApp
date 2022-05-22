@@ -16,17 +16,17 @@ namespace ToDoListApp.Data
             _context=context;
         }
 
-        public IEnumerable<Tasks> GetAllTasks()
+        public IEnumerable<ToDoTask> GetAllTasks()
         {
             return _context.Tasks.ToList();
         }
 
-        public Tasks GetTaskById(int taskId)
+        public ToDoTask GetTaskById(int taskId)
         {
             return _context.Tasks.Find(taskId);
         }
 
-        public Tasks GetTaskByName(string name)
+        public ToDoTask GetTaskByName(string name)
         {
             return _context.Tasks.FirstOrDefault(t=>t.Name==name);
         }
@@ -36,13 +36,13 @@ namespace ToDoListApp.Data
             return _context.Tasks.Any(t => t.Id == id);
         }
 
-        public bool InsertTask(Tasks task)
+        public bool InsertTask(ToDoTask task)
         {
             _context.Tasks.Add(task);
             return Save();
         }
 
-        public bool UpdateTask(Tasks task)
+        public bool UpdateTask(ToDoTask task)
         {
             _context.Tasks.Update(task);
             return Save();
@@ -50,7 +50,7 @@ namespace ToDoListApp.Data
 
         public bool DeleteTask(int taskId)
         {
-            Tasks task = _context.Tasks.Find(taskId);
+            ToDoTask task = _context.Tasks.Find(taskId);
             _context.Tasks.Remove(task);
             return Save();
         }

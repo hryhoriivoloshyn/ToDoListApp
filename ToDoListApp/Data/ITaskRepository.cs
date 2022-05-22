@@ -7,12 +7,11 @@ namespace ToDoListApp.Data
 {
     public interface ITaskRepository : IDisposable
     {
-        IEnumerable<Tasks> GetAllTasks();
-        Tasks GetTaskById(int taskId);
-        Tasks GetTaskByName(string name);
+        IEnumerable<ToDoTask> GetAllTasks();
+        ToDoTask GetTaskById(int taskId);
         bool IsTaskExists(int taskId);
-        bool InsertTask(Tasks task);
-        bool UpdateTask(Tasks task);
+        bool InsertTask(ToDoTask task);
+        bool UpdateTask(ToDoTask task);
         bool DeleteTask(int taskId);
         bool Save();
     }
