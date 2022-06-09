@@ -8,12 +8,9 @@ namespace ToDoListApp.Dtos
     {
         public MappingProfile()
         {
-            CreateMap<ToDoTask, TaskDto>();
-            CreateMap<TaskDto, ToDoTask>();
-            CreateMap<CreateTaskDto, ToDoTask>();
-            CreateMap<ToDoTask, CreateTaskDto>();
-            CreateMap<UpdateTaskDto, ToDoTask>();
-            CreateMap<ToDoTask, UpdateTaskDto>();
+            CreateMap<ToDoTask, TaskDto>().ReverseMap();
+            CreateMap<CreateTaskDto, ToDoTask>().ReverseMap();
+            CreateMap<UpdateTaskDto, ToDoTask>().ReverseMap();
         }
     }
 }

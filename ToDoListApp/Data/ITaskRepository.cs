@@ -5,7 +5,7 @@ using ToDoListApp.Models;
 
 namespace ToDoListApp.Data
 {
-    public interface ITaskRepository : IDisposable
+    public interface ITaskRepository
     {
         IEnumerable<ToDoTask> GetAllTasks();
         ToDoTask GetTaskById(int taskId);
@@ -13,6 +13,5 @@ namespace ToDoListApp.Data
         bool InsertTask(ToDoTask task);
         bool UpdateTask(ToDoTask task);
         bool DeleteTask(int taskId);
-        bool Save();
     }
 }

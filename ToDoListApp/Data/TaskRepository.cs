@@ -7,7 +7,7 @@ using ToDoListApp.Models;
 
 namespace ToDoListApp.Data
 {
-    public class TaskRepository : ITaskRepository, IDisposable
+    public class TaskRepository : ITaskRepository
     {
         private readonly ApplicationDbContext _context;
 
@@ -24,11 +24,6 @@ namespace ToDoListApp.Data
         public ToDoTask GetTaskById(int taskId)
         {
             return _context.Tasks.Find(taskId);
-        }
-
-        public ToDoTask GetTaskByName(string name)
-        {
-            return _context.Tasks.FirstOrDefault(t=>t.Name==name);
         }
 
         public bool IsTaskExists(int id)
@@ -55,29 +50,9 @@ namespace ToDoListApp.Data
             return Save();
         }
 
-        public bool Save()
+        private bool Save()
         {
             return _context.SaveChanges() >=0 ? true : false;
-        }
-
-        private bool disposed = false;
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!this.disposed)
-            {
-                if (disposing)
-                {
-                    _context.Dispose();
-                }
-            }
-            this.disposed=true;
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
         }
     }
 }
